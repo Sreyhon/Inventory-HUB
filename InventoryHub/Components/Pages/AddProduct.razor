@@ -1,0 +1,73 @@
+﻿@page "/products/add"
+
+@using InventoryHub.Models
+@using InventoryHub.Services
+
+@inject ProductService ProductService
+@inject NavigationManager Navigation
+
+<h1>Add Product</h1>
+
+<EditForm Model="@product"
+          OnValidSubmit="@SaveProduct">
+
+    <DataAnnotationsValidator />
+
+    <div class="mb-3">
+        <label>Name</label>
+
+        <InputText class="form-control"
+                   @bind-Value="product.Name" />
+
+        <ValidationMessage For="@(() => product.Name)" />
+    </div>
+
+    <div class="mb-3">
+        <label>Category</label>
+
+        <InputText class="form-control"
+                   @bind-Value="product.Category" />
+
+        <ValidationMessage For="@(() => product.Category)" />
+    </div>
+
+    <div class="mb-3">
+        <label>Price</label>
+
+        <InputNumber class="form-control"
+                     @bind-Value="product.Price" />
+
+        <ValidationMessage For="@(() => product.Price)" />
+    </div>
+
+    <div class="mb-3">
+        <label>Quantity</label>
+
+        <InputNumber class="form-control"
+                     @bind-Value="product.Quantity" />
+
+        <ValidationMessage For="@(() => product.Quantity)" />
+    </div>
+
+    <button class="btn btn-primary"
+            type="submit">
+        Save Product
+    </button>
+
+</EditForm>
+
+@code {
+
+    private Product product = new();
+
+    private async Task SaveProduct()
+    {
+        var success =
+            await ProductService.AddProductAsync(product);
+
+        if (success)
+        {
+            Navigation.NavigateTo("/products");
+        }
+    }
+}
